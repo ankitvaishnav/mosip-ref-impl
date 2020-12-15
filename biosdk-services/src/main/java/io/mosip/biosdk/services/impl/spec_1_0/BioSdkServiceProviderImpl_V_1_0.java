@@ -55,7 +55,9 @@ public class BioSdkServiceProviderImpl_V_1_0 implements BioSdkServiceProvider {
         InitRequestDto initRequestDto = gson.fromJson(decryptedRequest, InitRequestDto.class);
         logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"init: ", "json to dto successful");
         try {
+            logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"init input: ", gson.toJson(initRequestDto));
             sdkInfo = iBioApi.init(initRequestDto.getInitParams());
+            logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"init output: ", gson.toJson(sdkInfo));
         } catch (Throwable e){
             e.printStackTrace();
             logger.error(LOGGER_SESSIONID, LOGGER_IDTYPE,"init: ", e.toString()+" "+e.getMessage());
@@ -93,12 +95,14 @@ public class BioSdkServiceProviderImpl_V_1_0 implements BioSdkServiceProvider {
         MatchRequestDto matchRequestDto = gson.fromJson(decryptedRequest, MatchRequestDto.class);
         logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"match: ", "json to dto successful");
         try {
+            logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"match input: ", gson.toJson(matchRequestDto));
             response = iBioApi.match(
                     matchRequestDto.getSample(),
                     matchRequestDto.getGallery(),
                     matchRequestDto.getModalitiesToMatch(),
                     matchRequestDto.getFlags()
             );
+            logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"match output: ", gson.toJson(response));
         } catch (Throwable e){
             e.printStackTrace();
             logger.error(LOGGER_SESSIONID, LOGGER_IDTYPE,"match: ", e.toString()+" "+e.getMessage());
@@ -115,11 +119,13 @@ public class BioSdkServiceProviderImpl_V_1_0 implements BioSdkServiceProvider {
         ExtractTemplateRequestDto extractTemplateRequestDto = gson.fromJson(decryptedRequest, ExtractTemplateRequestDto.class);
         logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"extractTemplate: ", "json to dto successful");
         try {
+            logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"extractTemplate input: ", gson.toJson(extractTemplateRequestDto));
             response = iBioApi.extractTemplate(
                     extractTemplateRequestDto.getSample(),
                     extractTemplateRequestDto.getModalitiesToExtract(),
                     extractTemplateRequestDto.getFlags()
             );
+            logger.debug(LOGGER_SESSIONID, LOGGER_IDTYPE,"extractTemplate output: ", gson.toJson(response));
         } catch (Throwable e){
             e.printStackTrace();
             logger.error(LOGGER_SESSIONID, LOGGER_IDTYPE,"extractTemplate: ", e.toString()+" "+e.getMessage());

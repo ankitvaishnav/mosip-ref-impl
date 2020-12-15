@@ -19,7 +19,7 @@ public final class LoggerConfig {
 	
 	static {
         MOSIP_ROLLING_APPENDER.setAppend(true);
-        MOSIP_ROLLING_APPENDER.setAppenderName("org.apache.log4j.RollingFileAppender");
+        MOSIP_ROLLING_APPENDER.setAppenderName("fileappender");
         MOSIP_ROLLING_APPENDER.setFileName("./logs/biosdk-service.log");
         MOSIP_ROLLING_APPENDER.setFileNamePattern("./logs/biosdk-service-%d{yyyy-MM-dd}-%i.log");
         MOSIP_ROLLING_APPENDER.setImmediateFlush(true);
