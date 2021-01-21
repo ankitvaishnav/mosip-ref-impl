@@ -10,6 +10,7 @@ import io.mosip.kernel.biometrics.entities.BIR;
 import io.mosip.kernel.biometrics.entities.BiometricRecord;
 import io.mosip.kernel.biometrics.entities.VersionType;
 import org.apache.commons.io.FileUtils;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.XML;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class Util {
     private static int PRETTY_PRINT_INDENT_FACTOR = 4;
     private Gson gson = new GsonBuilder().serializeNulls().create();
 
-    public static String xmlToJson(String path) throws FileNotFoundException {
+    public static String xmlToJson(String path) throws FileNotFoundException, JSONException {
         BufferedReader br = new BufferedReader(new FileReader(new File(path)));
         JSONObject xmlJSONObj = XML.toJSONObject(br);
         String jsonPrettyPrintString = xmlJSONObj.toString(PRETTY_PRINT_INDENT_FACTOR);
