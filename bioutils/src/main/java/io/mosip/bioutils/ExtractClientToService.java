@@ -22,6 +22,7 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
@@ -62,15 +63,12 @@ public class ExtractClientToService {
         Client_V_1_0 client_v_1_0 = new Client_V_1_0();
         Response<BiometricRecord> res = client_v_1_0.extractTemplate(sample, modalitiesToExtract, new HashMap<>());
 
+        printSegments(res);
         List<BIR> templates = new LinkedList();
-        templates.add(isSuccessResponse(res) ? BIRConverter.convertToBIR((io.mosip.kernel.biometrics.entities.BIR)((BiometricRecord)res.getResponse()).getSegments().get(0)) : null);
-        System.out.println(dir);
-////        List<BIR> birs = gson.fromJson(gson.toJson(res.getResponse().getSegments()), List.class);
+        templates.add(isSuccessResponse(res) ? BIRConverter.convertToBIR((res.getResponse()).getSegments().get(0)) : null);
         CbeffImpl cbeff = new CbeffImpl();
         byte[] cbe_bytes = cbeff.createXML(templates, xsd);
         FileUtils.writeByteArrayToFile(new File(responseCbeffPath), cbe_bytes);
-//        String requstJson = gson.toJson(res);
-//        LOGGER.info(requstJson);
     }
 
     private static boolean isSuccessResponse(Response<?> response) {
@@ -92,5 +90,16 @@ public class ExtractClientToService {
             biometricRecord.getSegments().add(BIRConverter.convertToBiometricRecordBIR(birs[i]));
         }
         return biometricRecord;
+    }
+
+    private static void printSegments(Response<BiometricRecord> rbr) throws UnsupportedEncodingException {
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        List<io.mosip.kernel.biometrics.entities.BIR> segments = rbr.getResponse().getSegments();
+        for (io.mosip.kernel.biometrics.entities.BIR bir: segments){
+            io.mosip.kernel.biometrics.entities.BIR br = gson.fromJson(gson.toJson(bir), io.mosip.kernel.biometrics.entities.BIR.class);
+            br.setBdb("".getBytes());
+            br.setSb("".getBytes());
+            System.out.println(gson.toJson(br));
+        }
     }
 }

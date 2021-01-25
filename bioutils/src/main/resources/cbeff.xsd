@@ -81,7 +81,7 @@ SCHEMA.
     </xs:complexType>
     <xs:simpleType name="QualityScoreType">
         <xs:restriction base="xs:unsignedInt">
-            <xs:maxInclusive value="100"/>
+            <xs:maxInclusive value="200"/>
         </xs:restriction>
     </xs:simpleType>
     <xs:complexType name="QualityType">

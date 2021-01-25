@@ -7,6 +7,7 @@ import io.mosip.biosdk.client.config.LoggerConfig;
 import io.mosip.biosdk.client.dto.*;
 import io.mosip.biosdk.client.utils.Util;
 import io.mosip.kernel.biometrics.constant.BiometricType;
+import io.mosip.kernel.biometrics.entities.BIR;
 import io.mosip.kernel.biometrics.entities.BiometricRecord;
 import io.mosip.kernel.biometrics.model.MatchDecision;
 import io.mosip.kernel.biometrics.model.QualityCheck;
@@ -186,7 +187,9 @@ public class Client_V_1_0 implements IBioApi {
 				gson.fromJson(jsonResponse.get("response") != null ? jsonResponse.get("response").toString() : null, BiometricRecord.class)
 			);
 
-//			response = gson.fromJson(js.get("response").toString(), Response.class);
+			/* Manipulating response */
+			BiometricRecord br = addVersions(sample, response.getResponse());
+			response.setResponse(br);
 		} catch (ParseException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
@@ -260,6 +263,29 @@ public class Client_V_1_0 implements IBioApi {
 			throw new RuntimeException(e);
 		}
 		return resBiometricRecord;
+	}
+
+	private BiometricRecord addVersions(BiometricRecord sample, BiometricRecord res){
+		/* Manipulating response */
+		List<BIR> sampleSegments = sample.getSegments();
+		List<BIR> resSegments = res.getSegments();
+
+		for(int i=0; i<resSegments.size();i++){
+			BiometricType resType = resSegments.get(i).getBdbInfo().getType().get(0);
+			String resSubType = String.join(" ", resSegments.get(i).getBdbInfo().getSubtype());
+
+			for(BIR sampleSegment: sampleSegments){
+				BiometricType sampleType = sampleSegment.getBdbInfo().getType().get(0);
+				String sampleSubType = String.join(" ", sampleSegment.getBdbInfo().getSubtype());
+				if( resType.value().equalsIgnoreCase(sampleType.value()) &&
+						resSubType.equalsIgnoreCase(sampleSubType) ){
+					resSegments.get(i).setVersion(sampleSegment.getVersion());
+					resSegments.get(i).setCbeffversion(sampleSegment.getCbeffversion());
+				}
+			}
+		}
+
+		return res;
 	}
 
 	private RequestDto generateNewRequestDto(Object body){
