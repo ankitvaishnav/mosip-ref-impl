@@ -281,13 +281,19 @@ public class Client_V_1_0 implements IBioApi {
 
 		for(int i=0; i<resSegments.size();i++){
 			BiometricType resType = resSegments.get(i).getBdbInfo().getType().get(0);
-			String resSubType = String.join(" ", resSegments.get(i).getBdbInfo().getSubtype());
+			String resSubType = "";
+			if(resSegments.get(i).getBdbInfo() != null && resSegments.get(i).getBdbInfo().getSubtype() != null){
+				resSubType = String.join(" ", resSegments.get(i).getBdbInfo().getSubtype());
+			}
 
 			for(BIR sampleSegment: sampleSegments){
 				BiometricType sampleType = sampleSegment.getBdbInfo().getType().get(0);
-				String sampleSubType = String.join(" ", sampleSegment.getBdbInfo().getSubtype());
+				String sampleSubType = "";
+				if(sampleSegment.getBdbInfo() != null && sampleSegment.getBdbInfo().getSubtype() != null){
+					sampleSubType = String.join(" ", sampleSegment.getBdbInfo().getSubtype());
+				}
 				if( resType.value().equalsIgnoreCase(sampleType.value()) &&
-						resSubType.equalsIgnoreCase(sampleSubType) ){
+						(resSubType.equalsIgnoreCase(sampleSubType) || resSubType.isEmpty() || sampleSubType.isEmpty()) ){
 					resSegments.get(i).setVersion(sampleSegment.getVersion());
 					resSegments.get(i).setCbeffversion(sampleSegment.getCbeffversion());
 				}
