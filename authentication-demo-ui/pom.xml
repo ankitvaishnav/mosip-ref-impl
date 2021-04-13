@@ -2,11 +2,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>io.mosip.authentication</groupId>
-		<artifactId>authentication-parent</artifactId>
-		<version>1.0.9-SNAPSHOT</version>
-	</parent>
+<!--	<parent>-->
+<!--		<groupId>io.mosip.authentication</groupId>-->
+<!--		<artifactId>authentication-parent</artifactId>-->
+<!--		<version>1.0.9</version>-->
+<!--	</parent>-->
+	<groupId>io.mosip.authentication</groupId>
 	<artifactId>authentication-demo-ui</artifactId>
 	<name>authentication-demo-ui</name>
 	<version>1.0.9</version>
@@ -46,17 +47,17 @@
 		<dependency>
 			<groupId>io.mosip.kernel</groupId>
 			<artifactId>kernel-keygenerator-bouncycastle</artifactId>
-			<version>0.10.1</version>
+			<version>1.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>io.mosip.kernel</groupId>
 			<artifactId>kernel-crypto-jce</artifactId>
-			<version>0.10.1</version>
+			<version>1.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>io.mosip.kernel</groupId>
 			<artifactId>kernel-core</artifactId>
-			<version>0.10.1</version>
+			<version>1.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -86,6 +87,15 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
