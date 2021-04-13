@@ -487,9 +487,12 @@ public class IdaController {
 			e.printStackTrace();
 		}
 		String result = stringBuilder.toString();
-		String error = ((Map) mapper.readValue(result, Map.class).get("error")).get("errorCode").toString();
-		
-		if (error.equals("0")) {
+		System.out.println("Capture response:\n" + result);
+		Object errorObj = mapper.readValue(result, Map.class).get("errorCode");
+		if(errorObj != null) {
+			responsetextField.setText("Capture Failed: "+result);
+			responsetextField.setStyle("-fx-text-fill: red; -fx-font-size: 20px; -fx-font-weight: bold");
+		} else {
 			responsetextField.setText("Capture Success");
 			responsetextField.setStyle("-fx-text-fill: green; -fx-font-size: 20px; -fx-font-weight: bold");
 			ObjectMapper objectMapper = new ObjectMapper();
@@ -497,16 +500,20 @@ public class IdaController {
 			for (int i = 0; i < dataList.size(); i++) {
 				Map b = (Map) dataList.get(i);
 				String dataJws = (String) b.get("data");
-				Map dataMap = objectMapper.readValue(CryptoUtil.decodeBase64(dataJws.split("\\.")[1]), Map.class);
-				System.out.println((i+1) + " Bio-type: " + dataMap.get("bioType") + " Bio-sub-type: " +  dataMap.get("bioSubType"));
-				previousHash = (String) b.get("hash");
+				Map error = (Map) b.get("error");
+				if (error.get("errorCode") == null && error.get("errorCode").equals("0")){
+					Map dataMap = objectMapper.readValue(CryptoUtil.decodeBase64(dataJws.split("\\.")[1]), Map.class);
+					System.out.println((i+1) + " Bio-type: " + dataMap.get("bioType") + " Bio-sub-type: " +  dataMap.get("bioSubType"));
+					previousHash = (String) b.get("hash");
+				} else {
+					responsetextField.setText("Capture Failed: "+error.toString());
+					responsetextField.setStyle("-fx-text-fill: red; -fx-font-size: 20px; -fx-font-weight: bold");
+				}
 			}
-		} else {
-			responsetextField.setText("Capture Failed");
-			responsetextField.setStyle("-fx-text-fill: red; -fx-font-size: 20px; -fx-font-weight: bold");
 		}
+
 		System.out.println(result);
-	
+
 		return result;
 	}
 
