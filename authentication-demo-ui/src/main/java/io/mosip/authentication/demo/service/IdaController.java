@@ -491,6 +491,7 @@ public class IdaController {
 		Object errorObj = mapper.readValue(result, Map.class).get("errorCode");
 		if(errorObj != null) {
 			responsetextField.setText("Capture Failed: "+result);
+			System.out.println("Result: "+result);
 			responsetextField.setStyle("-fx-text-fill: red; -fx-font-size: 20px; -fx-font-weight: bold");
 		} else {
 			responsetextField.setText("Capture Success");
@@ -501,12 +502,13 @@ public class IdaController {
 				Map b = (Map) dataList.get(i);
 				String dataJws = (String) b.get("data");
 				Map error = (Map) b.get("error");
-				if (error.get("errorCode") == null && error.get("errorCode").equals("0")){
+				if (error.get("errorCode") != null && (error.get("errorCode").equals("0") || error.get("errorCode").toString().equals("0"))){
 					Map dataMap = objectMapper.readValue(CryptoUtil.decodeBase64(dataJws.split("\\.")[1]), Map.class);
 					System.out.println((i+1) + " Bio-type: " + dataMap.get("bioType") + " Bio-sub-type: " +  dataMap.get("bioSubType"));
 					previousHash = (String) b.get("hash");
 				} else {
 					responsetextField.setText("Capture Failed: "+error.toString());
+					System.out.println(error.toString());
 					responsetextField.setStyle("-fx-text-fill: red; -fx-font-size: 20px; -fx-font-weight: bold");
 				}
 			}
@@ -671,6 +673,8 @@ public class IdaController {
 		byte[] encryptedIdentityBlock = cryptoUtil.symmetricEncrypt(identityBlock.getBytes(), secretKey);
 		encryptionResponseDto.setEncryptedIdentity(Base64.encodeBase64URLSafeString(encryptedIdentityBlock));
 		String publicKeyStr = getPublicKey(identityBlock, isInternal);
+		System.out.println("----------------- public key --------------------");
+		System.out.println(publicKeyStr);
 		PublicKey publicKey = KeyFactory.getInstance(ASYMMETRIC_ALGORITHM_NAME)
 				.generatePublic(new X509EncodedKeySpec(CryptoUtil.decodeBase64(publicKeyStr)));
 		byte[] encryptedSessionKeyByte = cryptoUtil.asymmetricEncrypt((secretKey.getEncoded()), publicKey);
