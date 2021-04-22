@@ -1,10 +1,10 @@
 <div class="flex-body">
     <mat-card>
-        <mat-card-content class="forms-container">
+        <mat-card-content class="forms-container" *ngIf="pageName !=='Location'">
             <div class="primary-form">
                 <strong class="title">{{'center.language' | translate }}</strong>
                 <span
-                  *ngIf="!disableForms"
+                  *ngIf="!disableForms && pageName !=='Blacklisted Word'"
                   matTooltip="{{ 'center.keyboard-tooltip' | translate }}"
                   (click)="openKeyboard('primary')"
                   style="float: right; color: grey; cursor: pointer;"
@@ -13,7 +13,21 @@
                 <hr />
                 <br /><br />
                 <div *ngFor="let field of fields; let i = index" class="mat-form1">
-                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text'">
+                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text' && field.name !== 'code'">
+                       <input
+                        #keyboardRef
+                        #{{field.name}}
+                        (keyup)="captureValue($event, field.name, 'primary')"
+                        (focus)="scrollPage(field.name, 'primary', field.name, i)"
+                        matInput
+                        placeholder="{{
+                          field.label[primaryLang] | translate
+                        }}"
+                        [value]="primaryData[field.name]"
+                        field.required
+                      />
+                    </mat-form-field>
+                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text' && field.name === 'code' && isCreateForm">
                       <input
                         #keyboardRef
                         #{{field.name}}
@@ -25,6 +39,23 @@
                         }}"
                         [value]="primaryData[field.name]"
                         field.required
+                      />
+                    </mat-form-field>
+
+                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text' && field.name === 'code' && !isCreateForm">
+                      <input
+                        #keyboardRef
+                        #{{field.name}}
+                        (keyup)="captureValue($event, field.name, 'primary')"
+                        (focus)="scrollPage(field.name, 'primary', field.name, i)"
+                        matInput
+                        placeholder="{{
+                          field.label[primaryLang] | translate
+                        }}"
+                        [value]="primaryData[field.name]"
+                        field.required
+                        readonly
+                        disabled
                       />
                     </mat-form-field>
 
@@ -171,7 +202,7 @@
                 </div>
             </div>
             <mat-divider [vertical]="true" [inset]="true"></mat-divider>
-            <div *ngIf="showSecondaryForm" class="secondary-form">
+            <div *ngIf="showSecondaryForm && pageName !=='Blacklisted Word'" class="secondary-form">
                 <strong class="title">{{ languageNames[secondaryLang] }}</strong>
                 <span
                   *ngIf="!disableForms"
@@ -183,7 +214,7 @@
                 <hr />
                 <br /><br />
                 <div *ngFor="let field of fields; let ii = index" class="mat-form2">
-                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text'">
+                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text' && field.name !== 'code'">
                       <input
                         #keyboardRef
                         #{{field.name}}
@@ -196,7 +227,34 @@
                         [value]="secondaryData[field.name]"
                       />
                     </mat-form-field>
-
+                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text' && field.name === 'code' && isCreateForm">
+                      <input
+                        #keyboardRef
+                        #{{field.name}}
+                        (keyup)="captureValue($event, field.name, 'secondary')"
+                        (focus)="scrollPage(field.name, 'secondary', field.name, ii)"
+                        matInput
+                        placeholder="{{
+                          field.label[secondaryLang]
+                        }}"
+                        [value]="secondaryData[field.name]"
+                      />
+                    </mat-form-field>
+                    <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'text' && field.name === 'code' && !isCreateForm">
+                      <input
+                        #keyboardRef
+                        #{{field.name}}
+                        (keyup)="captureValue($event, field.name, 'secondary')"
+                        (focus)="scrollPage(field.name, 'secondary', field.name, ii)"
+                        matInput
+                        placeholder="{{
+                          field.label[secondaryLang]
+                        }}"
+                        [value]="secondaryData[field.name]"
+                        readonly
+                        disabled
+                      />
+                    </mat-form-field>
                     <mat-form-field *ngIf="field.showInSingleView === 'true' && field.inputType === 'calendar'">
                       <input
                         matInput
@@ -341,6 +399,64 @@
                 </div>
             </div>
         </mat-card-content>
+        <mat-card-content class="forms-container" *ngIf="pageName ==='Location'">
+          <div class="primary-form">
+            <strong class="title">{{'center.language' | translate }}</strong>
+            <span
+              *ngIf="!disableForms && pageName !=='Blacklisted Word'"
+              matTooltip="{{ 'center.keyboard-tooltip' | translate }}"
+              (click)="openKeyboard('primary')"
+              style="float: right; color: grey; cursor: pointer;"
+              ><i class="material-icons">keyboard</i></span
+            >
+            <hr />
+            <br /><br />
+            <mat-form-field>
+              <mat-select
+                id="hierarchyLevel"
+                placeholder="Hierarchy Level"
+                [value]="primaryData.hierarchyLevel"
+                >
+                <mat-option
+                  *ngFor="let data of dropDownValues.hierarchyLevelCode.primary"
+                  (onSelectionChange)="
+                    captureDropDownValue($event, 'hierarchyLevel', 'primary')
+                  "
+                  [value]="data.locationHierarchylevel"
+                >
+                  {{ data.locationHierarchyName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        <mat-divider [vertical]="true" [inset]="true"></mat-divider>
+          <div *ngIf="showSecondaryForm && pageName !=='Blacklisted Word'" class="secondary-form">
+            <strong class="title">{{ languageNames[secondaryLang] }}</strong>
+            <span
+              *ngIf="!disableForms"
+              matTooltip="{{languageNames['keyboard-tooltip'] | translate }}"
+              (click)="openKeyboard('secondary')"
+              style="float: right; color: grey; cursor: pointer;"
+              ><i class="material-icons">keyboard</i></span
+            >
+            <hr />
+            <br /><br />
+            <mat-form-field>
+              <mat-select
+                id="hierarchyLevel"
+                placeholder="Hierarchy Level"
+                [value]="secondaryData.hierarchyLevel"
+                >
+                <mat-option
+                  *ngFor="let data of dropDownValues.hierarchyLevelCode.secondary"
+                  [value]="data.locationHierarchylevel"
+                >
+                  {{ data.locationHierarchyName}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          </mat-card-content>
         <mat-card-actions class="action-buttons">
         <button id="createButton" mat-raised-button (click)="submit()">
         Save

@@ -63,7 +63,7 @@ export const navItems = [
     route: '/admin/packet-status',
     children: null,
     auditEventId: 'ADM-008',
-    roles: ['ZONAL_ADMIN']
+    roles: ['ZONAL_ADMIN', 'GLOBAL_ADMIN']
   },
   {
     displayName: 'menuItems.item3.title',
@@ -72,6 +72,73 @@ export const navItems = [
     children: null,
     auditEventId: 'ADM-009',
     roles: ['GLOBAL_ADMIN']
+  },
+  {
+    displayName: 'menuItems.item5.title',
+    icon: 'assets/images/support.svg',
+    route: 'admin/bulkupload',
+    children: [
+      {
+        displayName: 'menuItems.item5.subItem1',
+        icon: null,
+        route: '/admin/bulkupload/masterdataupload',
+        auditEventId: 'ADM-004',
+        roles: ['GLOBAL_ADMIN']
+      },
+      {
+        displayName: 'menuItems.item5.subItem2',
+        icon: null,
+        route: '/admin/bulkupload/packetupload',
+        auditEventId: 'ADM-005',
+        roles: ['GLOBAL_ADMIN']
+      }
+    ],
+    auditEventId: 'ADM-003',
+    roles: ['GLOBAL_ADMIN']
+  },
+  {
+    displayName: 'menuItems.item6.title',
+    icon: 'assets/images/support.svg',
+    route: 'admin/keymanager',
+    children: [
+      {
+        displayName: 'menuItems.item6.subItem1',
+        icon: null,
+        route: '/admin/keymanager/generatecsr',
+        auditEventId: 'ADM-004',
+        roles: ['ZONAL_ADMIN', 'GLOBAL_ADMIN']
+      },
+      {
+        displayName: 'menuItems.item6.subItem2',
+        icon: null,
+        route: '/admin/keymanager/generatemasterkey',
+        auditEventId: 'ADM-004',
+        roles: ['ZONAL_ADMIN', 'GLOBAL_ADMIN']
+      },
+      {
+        displayName: 'menuItems.item6.subItem3',
+        icon: null,
+        route: '/admin/keymanager/getcertificate',
+        auditEventId: 'ADM-004',
+        roles: ['ZONAL_ADMIN', 'GLOBAL_ADMIN']
+      },
+      {
+        displayName: 'menuItems.item6.subItem4',
+        icon: null,
+        route: '/admin/keymanager/uploadcertificate',
+        auditEventId: 'ADM-004',
+        roles: ['ZONAL_ADMIN', 'GLOBAL_ADMIN']
+      },
+      {
+        displayName: 'menuItems.item6.subItem5',
+        icon: null,
+        route: '/admin/keymanager/uploadotherdomaincertificate',
+        auditEventId: 'ADM-004',
+        roles: ['ZONAL_ADMIN', 'GLOBAL_ADMIN']
+      }
+    ],
+    auditEventId: 'ADM-003',
+    roles: ['ZONAL_ADMIN', 'GLOBAL_ADMIN']
   }
 ];
 
@@ -284,7 +351,7 @@ export const ListViewIdKeyMapping = {
   'machine-type': { idKey: 'code', auditEventId: 'ADM-067' },
   templates: { idKey: 'id', auditEventId: 'ADM-068' },
   title: { idKey: 'code', auditEventId: 'ADM-069' },
-  'blacklisted-words': { idKey: 'word', auditEventId: 'ADM-070' },
+  'blacklisted-words': { idKey: 'word', auditEventId: 'ADM-070'},
   'document-type': { idKey: 'code', auditEventId: 'ADM-071' },
   location: { idKey: 'postalCode', auditEventId: 'ADM-072' },
   'device-specs': { idKey: 'id', auditEventId: 'ADM-073' },
@@ -294,7 +361,11 @@ export const ListViewIdKeyMapping = {
   'individual-type': { idKey: 'code', auditEventId: 'ADM-077' },
   'gender-type': { idKey: 'code', auditEventId: 'ADM-078' },
   'center-type': { idKey: 'code', auditEventId: 'ADM-079' },
-  holiday: { idKey: 'holidayId', auditEventId: 'ADM-080' }
+  holiday: { idKey: 'holidayId', auditEventId: 'ADM-080' },
+  masterdataupload : { idKey: 'transcationId', auditEventId: 'ADM-081' },
+  packetupload : { idKey: 'transcationId', auditEventId: 'ADM-082' },
+  getcertificate : { idKey: 'applicationId', auditEventId: 'ADM-083' }
+  
 };
 
 export const FilterMapping = {
