@@ -36,7 +36,7 @@ import static io.mosip.biosdk.services.constants.AppConstants.LOGGER_SESSIONID;
 
 @RestController
 @RequestMapping("/")
-@Api(tags = "Sdk")
+@Api(tags = "Bio-SDK services")
 @CrossOrigin("*")
 public class MainController {
 
@@ -61,7 +61,7 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body("Service is running... "+d.toString());
     }
 
-    @PreAuthorize("hasAnyRole('REGISTRATION_PROCESSOR')")
+    @PreAuthorize("hasAnyRole('BIO_AUTHENTICATION')")
     @GetMapping(path = "/s")
     @ApiOperation(value = "Service status 1")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Service is running...") })
@@ -70,6 +70,7 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body("Service is running... "+d.toString());
     }
 
+    @PreAuthorize("hasAnyRole('BIO_AUTHENTICATION')")
     @PostMapping(path = "/init", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Initialization")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Initialization successful") })
@@ -91,6 +92,7 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body(gson.toJson(responseDto));
     }
 
+    @PreAuthorize("hasAnyRole('BIO_AUTHENTICATION')")
     @PostMapping(path = "/match", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Match")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Match successful") })
@@ -112,6 +114,7 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body(gson.toJson(responseDto));
     }
 
+    @PreAuthorize("hasAnyRole('BIO_AUTHENTICATION')")
     @PostMapping(path = "/check-quality", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Check quality")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Check successful") })
@@ -133,6 +136,7 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body(gson.toJson(responseDto));
     }
 
+    @PreAuthorize("hasAnyRole('BIO_AUTHENTICATION')")
     @PostMapping(path = "/extract-template", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Extract template")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Extract successful") })
@@ -154,6 +158,7 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body(gson.toJson(responseDto));
     }
 
+    @PreAuthorize("hasAnyRole('BIO_AUTHENTICATION')")
     @PostMapping(path = "/convert-format", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Convert format")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Convert successful") })
@@ -175,6 +180,7 @@ public class MainController {
         return ResponseEntity.status(HttpStatus.OK).body(gson.toJson(responseDto));
     }
 
+    @PreAuthorize("hasAnyRole('BIO_AUTHENTICATION')")
     @PostMapping(path = "/segment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Segment")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Segment successful") })
